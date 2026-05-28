@@ -12,6 +12,11 @@ description = "Per-base CIGAR-deletion rate along aligned reads — Rust port of
 name = "rsomics-deletion-profile"
 path = "src/main.rs"
 
+
+[lib]
+name = "rsomics_deletion_profile"
+path = "src/lib.rs"
+doctest = false
 [dependencies]
 rsomics-common = "0.6"
 rsomics-bamio = "0.1"
