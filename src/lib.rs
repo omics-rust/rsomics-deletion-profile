@@ -9,11 +9,6 @@ pub struct DeletionProfile {
     pub reads_used: u64,
 }
 
-/// Walk one BAM file and accumulate per-read-position deletion counts.
-///
-/// Only reads whose query length equals `read_length` and whose mapping quality
-/// is >= `min_mapq` contribute. Each CIGAR D operation increments
-/// `counts[query_pos_before_d]` by one.
 pub fn compute(
     bam: &Path,
     read_length: usize,
@@ -84,10 +79,6 @@ pub fn compute(
     Ok(DeletionProfile { counts, reads_used })
 }
 
-/// Write the tab-delimited deletion profile text output.
-///
-/// Format: header line then one `read_position\tdeletion_count` row per
-/// position (0-indexed), matching deletion_profile.py's `.deletion_profile.txt`.
 pub fn write_txt(profile: &DeletionProfile, out: &mut dyn std::io::Write) -> Result<()> {
     writeln!(out, "read_position\tdeletion_count").map_err(RsomicsError::Io)?;
     for (pos, &count) in profile.counts.iter().enumerate() {
@@ -96,10 +87,6 @@ pub fn write_txt(profile: &DeletionProfile, out: &mut dyn std::io::Write) -> Res
     Ok(())
 }
 
-/// Write the R-script companion output.
-///
-/// Matches deletion_profile.py's `.deletion_profile.r` format so downstream
-/// R workflows expecting that file continue to work.
 pub fn write_r(
     profile: &DeletionProfile,
     pdf_path: &str,
